@@ -2,9 +2,36 @@
 
 public class Tile : MonoBehaviour
 {
-	//public Grid grid;
+	[System.NonSerialized]
+	public Grid.Position position;
 
-	public int x;
-	public int y;
-	public bool passable = true;
+	[System.NonSerialized]
+	public Grid grid;
+
+	[System.NonSerialized]
+	public bool isWall;
+
+	private Renderer tileRenderer;
+	private MaterialPropertyBlock propertyBlock;
+
+	public void Highlight( bool highlighted )
+	{
+		if( highlighted )
+			propertyBlock.SetColor( "_Color", Color.white );
+		else
+			propertyBlock.Clear();
+
+		tileRenderer.SetPropertyBlock( propertyBlock );
+	}
+
+	private void Awake()
+	{
+		tileRenderer = GetComponent<Renderer>();
+		propertyBlock = new MaterialPropertyBlock();
+	}
+
+	private void OnMouseDown()
+	{
+		grid.MoveTo( position );
+	}
 }
