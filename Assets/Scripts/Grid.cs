@@ -7,8 +7,14 @@ public class Grid : MonoBehaviour
 	{
 		public int x;
 		public int y;
+
+		public Vector3 ToWorldPosition( Vector2 spacing, float height )
+		{
+			return new Vector3( x * spacing.x, height, y * spacing.y );
+		}
 	}
 
+	public Player playerPrefab;
 	public Tile blackTilePrefab;
 	public Tile whiteTilePrefab;
 	public Tile wallTilePrefab;
@@ -16,11 +22,12 @@ public class Grid : MonoBehaviour
 	public int width = 10;
 	public int height = 10;
 
-	public Vector2 spacing = new Vector2( 1.0f, 1.0f );
+	public Vector2 tileSpacing = new Vector2( 1.0f, 1.0f );
 
-	public Position playerPosition;
+	public Position playerStartingPosition;
 	public Position[] wallPositions;
 
+	private Player player;
 	private Tile[,] tiles;
 
 	public void MoveTo( Position position )
@@ -50,15 +57,19 @@ public class Grid : MonoBehaviour
 				else
 					tilePrefab = blackTilePrefab;
 
-				var position = new Vector3( i * spacing.x, 0.0f, j * spacing.y );
+				var position = new Position { x = i, y = j };
+				var worldPosition = position.ToWorldPosition( tileSpacing, 0.0f );
 
-				Tile tile = Instantiate( tilePrefab, position, Quaternion.identity, transform );
-				tile.position = new Position { x = i, y = j };
+				Tile tile = Instantiate( tilePrefab, worldPosition, Quaternion.identity, transform );
+				tile.position = position;
 				tile.grid = this;
 				tile.isWall = isWall;
 
 				tiles[i, j] = tile;
 			}
 		}
+
+		player = Instantiate( playerPrefab, transform, true );
+		player.MoveToPosition( playerStartingPosition, tileSpacing );
 	}
 }

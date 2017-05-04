@@ -16,8 +16,11 @@ public class Tile : MonoBehaviour
 
 	public void Highlight( bool highlighted )
 	{
+		if( isWall )
+			return;
+
 		if( highlighted )
-			propertyBlock.SetColor( "_Color", Color.white );
+			propertyBlock.SetColor( "_Color", Color.yellow );
 		else
 			propertyBlock.Clear();
 
