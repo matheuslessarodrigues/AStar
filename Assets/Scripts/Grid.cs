@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class Grid : MonoBehaviour
 {
@@ -30,12 +31,17 @@ public class Grid : MonoBehaviour
 	private Player player;
 	private Tile[,] tiles;
 
-	public void MoveTo( Position position )
+	public void MoveTo( Position targetPosition )
 	{
 		foreach( Tile tile in tiles )
 			tile.Highlight( false );
 
-		tiles[position.x, position.y].Highlight( true );
+		List<Position> path = PathFinder.FindPath( tiles, player.position, targetPosition );
+
+		foreach( Position position in path )
+			tiles[position.x, position.y].Highlight( true );
+		
+		player.SetPosition( targetPosition, tileSpacing );
 	}
 
 	private void Start()
@@ -70,6 +76,6 @@ public class Grid : MonoBehaviour
 		}
 
 		player = Instantiate( playerPrefab, transform, true );
-		player.MoveToPosition( playerStartingPosition, tileSpacing );
+		player.SetPosition( playerStartingPosition, tileSpacing );
 	}
 }
