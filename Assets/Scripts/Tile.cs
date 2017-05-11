@@ -35,6 +35,7 @@ public class Tile : MonoBehaviour
 
 	private void OnMouseDown()
 	{
-		grid.MoveTo( position );
+		if( !isWall )
+			grid.MoveTo( position );
 	}
 }

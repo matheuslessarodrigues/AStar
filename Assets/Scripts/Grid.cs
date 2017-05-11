@@ -9,6 +9,12 @@ public class Grid : MonoBehaviour
 		public int x;
 		public int y;
 
+		public Position( int x, int y )
+		{
+			this.x = x;
+			this.y = y;
+		}
+
 		public Vector3 ToWorldPosition( Vector2 spacing, float height )
 		{
 			return new Vector3( x * spacing.x, height, y * spacing.y );
